@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import Card from "./components/Card";
+import fetchData from "./services/api";
 
 function App() {
+  const [city, setCity] = useState('');
+  const [data, setData] = useState({});
+  
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    fetchData(city).then((response) => {
+      setData(response)
+    })
+  }
+
   return (
     <div className="flex flex-col w-full h-screen items-center justify-center ">
 
 
-      <form>
+      <form onSubmit={ handleSubmit }>
         <input
           type="text"
           placeholder="Cidade"
           className="p-3 rounded-lg outline-none"
+          value={city}
+          onChange={({ target: { value } }) => setCity(value)}
           />
 
         <button
@@ -21,7 +34,7 @@ function App() {
         </button>
       </form>
 
-      <Card />
+      <Card data={data} />
 
     </div>
   );
